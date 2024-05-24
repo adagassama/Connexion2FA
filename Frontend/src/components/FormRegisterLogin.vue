@@ -15,19 +15,19 @@
                 <input type="submit" value="Connexion" class="btn solid" />
             </form>
 
-            <form class="sign-up-form">
+            <form class="sign-up-form" @submit.prevent="register">
                 <h2 class="tittle">Inscription</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Nom Utilisateur" />
+                    <input v-model="name" type="text" placeholder="Nom Utilisateur" required/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder="Email" />
+                    <input v-model="email" type="email" placeholder="Email" required />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" />
+                    <input v-model="password" type="password" placeholder="Password" required />
                 </div>
                 <input type="submit" value="Inscription" class="btn" />
             </form>
@@ -54,13 +54,30 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
-            isSingUpMode: false
+            name: '',
+            email: '',
+            password: '',
+            isSingUpMode: false,
         }
     },
     methods: {
+        async register() {
+            try {
+                await axios.post('http://127.0.0.1:8000/api/register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                });
+                alert('Register successful. Please login !');
+            } catch (error) {
+                console.error(error);
+            }
+        },
         toggleSignUpMode() {
             this.isSingUpMode = true
         },
