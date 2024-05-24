@@ -55,6 +55,7 @@ class AuthController extends Controller
         ]);
     }
 
+    // Generated QRCode Url
     protected function getQRCodeUrl($email, $secret)
     {
         $google2fa = new Google2FA();
