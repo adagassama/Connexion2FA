@@ -48,7 +48,7 @@ class AuthController extends Controller
         }
 
         // Generate Token for user
-        $token = $user->createToken('authToken')->plainTexToken;
+        $token = $user->createToken('authToken')->plainTextToken;
 
         return response()->json(['token' => $token]);
     }
@@ -86,13 +86,13 @@ class AuthController extends Controller
         $google2fa = new Google2FA();
 
         $isValid = $google2fa->verifyKey($user->secret2fa, $request->token);
-        dd($isValid);
+
         if( $isValid ) {
-            $token = $user->createToken('authToken')->plainTexToken;
+            $token = $user->createToken('authToken')->plainTextToken;
             return response()->json(['token' => $token, 'success' => true]);
         }
 
-        return response()->json(['message' => 'Invalid code 2FA'], 400);
+        return response()->json(['message' => 'Invalid code 2FA fin de code']);
     }
 
 }
