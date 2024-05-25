@@ -2,15 +2,15 @@
 <div class="container" :class="{'register-mode': isSingUpMode }">
     <div class="forms-container">
         <div class="register-login">
-            <form class="login-form">
+            <form class="login-form" @submit.prevent="login">
                 <h2 class="tittle">Connexion</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
-                    <input type="text" placeholder="Email" />
+                    <input v-model="emailLogin" type="text" placeholder="Email" />
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="Password" />
+                    <input v-model="passwordLogin" type="password" placeholder="Password" />
                 </div>
                 <input type="submit" value="Connexion" class="btn solid" />
             </form>
@@ -62,6 +62,8 @@ export default {
             name: '',
             email: '',
             password: '',
+            emailLogin: '',
+            passwordLogin: '',
             isSingUpMode: false,
         }
     },
@@ -74,6 +76,21 @@ export default {
                     password: this.password,
                 });
                 alert('Register successful. Please login !');
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async login() {
+            try {
+                   const response = await axios.post('http://127.0.0.1:8000/api/login', {
+                    email: this.emailLogin,
+                    password: this.passwordLogin,
+                });
+                if ( response.data.two_factor_required ) {
+                    this.$emit('show-2fa', response.data.temp_token);
+                } else {
+                    alert(' Login successful ');
+                }
             } catch (error) {
                 console.error(error);
             }
