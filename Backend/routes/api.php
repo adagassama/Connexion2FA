@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/qrcode', [AuthController::class, 'getQRCode']);
+Route::post('/verify', [AuthController::class,'verify2faToken']);
