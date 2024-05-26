@@ -1,17 +1,25 @@
 <template>
-<div>
-    <h2>Authentification</h2>
-    <div v-if="qrCodeUrl">
-        <p>Scanner ce QR Code avec Google Authenticator ou Authy</p>
-        <img :src="qrCodeUrl" alt="QR Code">
-    </div>
-    <form @submit.prevent="verifyToken">
-        <div>
-            <label>Authentication Code:</label>
-            <input v-model="token" type="text" required>
+<div class="container">
+    <div class="forms-container">
+        <div class="login-register">
+            <form class="login-form" @submit.prevent="verifyToken">
+                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
+                <h2 class="title" v-if="qrCodeUrl">Authentification</h2>
+                <p>Scanner ce QR Code avec Google Authenticator ou Authy</p>
+                <img :src="qrCodeUrl" alt="QR Code" style="height: 300px;width: 300px;">
+                <label>Saisir le code:</label>
+                <div class="input-field">
+                    <i class="fa-solid fa-user"></i>
+                    <input v-model="token" type="text" required>
+                </div>
+                <button class="btn solid" type="submit">Verifier</button>
+            </form>
         </div>
-        <button type="submit">Verifier</button>
-    </form>
+    </div>
+
+    <div>
+        <span></span>
+    </div>
 </div>
 </template>
 
@@ -42,7 +50,7 @@ export default {
                     temp_token: this.tempToken,
                 });
                 if (response.data.success) {
-                    alert('2FA successful');
+                    this.$router.push({ name: 'Dashboard'});
                 } else {
                     alert('Invalid 2FA code AAA');
                 }
