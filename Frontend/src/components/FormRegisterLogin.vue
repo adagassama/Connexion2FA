@@ -3,10 +3,11 @@
     <div class="forms-container">
         <div class="login-register">
             <form class="login-form" @submit.prevent="handleLogin">
+                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
                 <h2 class="title">Connexion</h2>
                 <div class="input-field">
-                    <i class="fas fa-user"></i>
-                    <input v-model="emailLogin" type="text" placeholder="Email"  required/>
+                    <i class="fa fa-user"></i>
+                    <input v-model="emailLogin" type="email" placeholder="Email"  required/>
                 </div>
                 <div class="input-field">
                     <i class="fas fa-lock"></i>
@@ -16,6 +17,7 @@
             </form>
 
             <form class="register-form" @submit.prevent="handleRegister">
+                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
                 <h2 class="title">Inscription</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
@@ -50,17 +52,20 @@
             </div>
         </div>
     </div>
-    <ModalForm v-if="showModal" :qrCodeUrl="qrCodeUrl" :tempToken="tempToken" @close="showModal = false" />
+
+    <div>
+        <span></span>
+    </div>
 </div>
 </template>
 
 <script>
 import axios from 'axios';
-import ModalForm from './ModalForm.vue';
+import AlertComponent from './AlertComponent.vue'
 
 export default {
     components: {
-       ModalForm
+        AlertComponent
     },
     data() {
         return {
@@ -70,9 +75,8 @@ export default {
             emailLogin: '',
             passwordLogin: '',
             isSingUpMode: false,
-            showModal: false,
-            qrCodeUrl: '',
-            tempToken: '',
+            alertMessage: '',
+            alertType: ''
         }
     },
     methods: {
@@ -83,10 +87,14 @@ export default {
                     email: this.email,
                     password: this.password,
                 });
-                alert('Register successful. Please login !');
+                this.alertMessage = 'Inscription avec succès. Connectez vous svp';
+                this.alertType = 'success'
                 this.resetRegisterFields()
             } catch (error) {
-                console.error(error);
+                this.alertMessage = 'Echec lors Inscription. Veuillez Reessayer SVP !';
+                this.alertType = 'failed'
+                window.location.reload()
+                this.resetRegisterFields()
             }
         },
         async handleLogin() {
@@ -96,17 +104,18 @@ export default {
                     password: this.passwordLogin,
                 });
                 if ( response.data.two_factor_required ) {
-                   //this.qrCodeUrl = response.data.qrCodeUrl;
-                   //this.tempToken = response.data.temp_token;
-                   //this.showModal = true;
-                    this.$emit('show-2fa', response.data.temp_token);
-                    
+                   this.$emit('show-2fa', response.data.temp_token);
                 } else {
-                    alert(' Login successful ');
-                    this.resetLoginFields();
+                    // this.alertMessage = 'Connexion reussie avec succès';
+                    // this.alertType = 'success'
+                    // this.resetLoginFields();
                 }
             } catch (error) {
-                console.error(error);
+                this.alertMessage = 'Identifiant ou mot de passe invalide. Veuillez Reessayer SVP!';
+                this.alertType = 'failed'
+                window.location.reload()
+                this.resetLoginFields()
+                //console.error(error);
             }
         },
         toggleSignUpMode() {
