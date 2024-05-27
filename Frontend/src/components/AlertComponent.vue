@@ -1,8 +1,8 @@
 <template>
-<div :class="alertClass" v-if="visible">
-    <span class="closebtn" @click="closeAlert">&times;</span>
-    {{ message }}
-</div>
+    <div :class="alertClass" v-if="visible">
+        <span class="closebtn" @click="closeAlert">&times;</span>
+        {{ message }}
+    </div>
 </template>
 
 <script>
@@ -24,13 +24,13 @@ export default {
             default: 3000
         }
     },
-    data() {
+    data(){
         return {
             visible: true
         }
     },
     computed: {
-        alertClass() {
+        alertClass(){
             return {
                 'alert': true,
                 'alert-success': this.type === 'success',
@@ -40,11 +40,11 @@ export default {
         }
     },
     methods: {
-        closeAlert() {
+        closeAlert(){
             this.visible = false;
         }
     },
-    mounted() {
+    mounted(){
         setTimeout(() => {
             this.visible = false;
         }, this.duration);
@@ -53,6 +53,7 @@ export default {
 </script>
 
 <style scoped>
+
 div {
     width: 30%;
 }
@@ -94,4 +95,5 @@ div {
 .closebtn:hover {
     color: black;
 }
+
 </style>
