@@ -6,16 +6,30 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: '/auth',
+            path: '/',
             name: 'Auth',
             component: AuthView
         },
         {
             path: '/dashboard',
             name: 'Dashboard',
-            component: DashboardView
+            component: DashboardView,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/:catchAll(.*)',
+            redirect: { name: 'Auth'}
         },
     ]
+});
+
+router.beforeEach((to, from, next) => {
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+    if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+        next({ name:'Auth' });
+    }else{
+        next();
+    }
 })
 
-export default router
+export default router;

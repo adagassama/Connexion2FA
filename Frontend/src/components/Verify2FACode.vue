@@ -3,7 +3,7 @@
     <div class="forms-container">
         <div class="login-register">
             <form class="login-form" @submit.prevent="verifyToken">
-                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
+                
                 <h2 class="title" v-if="qrCodeUrl">Authentification</h2>
                 <p>Scanner ce QR Code avec Google Authenticator ou Authy</p>
                 <img :src="qrCodeUrl" alt="QR Code" style="height: 300px;width: 300px;">
@@ -25,6 +25,7 @@
 
 <script>
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 
 export default {
     props: ['tempToken'],
@@ -32,6 +33,7 @@ export default {
         return {
             token: '',
             qrCodeUrl: '',
+            router: useRouter(),
         };
     },
     async mounted() {
@@ -50,13 +52,18 @@ export default {
                     temp_token: this.tempToken,
                 });
                 if (response.data.success) {
-                    this.$router.push({ name: 'Dashboard'});
-                } else {
+                    localStorage.setItem('isAuthenticated', 'true')
+                    this.router.push({ name: 'Dashboard'});
+                }else {
                     alert('Invalid 2FA code AAA');
+                    this.resetCodeField();
                 }
             } catch (error) {
                 console.error(error);
             }
+        },
+        resetCodeField(){
+            this.token = "";
         },
     },
 };

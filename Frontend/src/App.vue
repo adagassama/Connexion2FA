@@ -1,7 +1,9 @@
-<script setup>
-import AuthView from '@/views/AuthView.vue';
+<script>
+export default {
+  name: 'App'
+};
 </script>
 
 <template>
-  <AuthView />
+  <routerView />
 </template>
