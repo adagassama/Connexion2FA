@@ -3,7 +3,6 @@
     <div class="forms-container">
         <div class="login-register">
             <form class="login-form" @submit.prevent="handleLogin">
-                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
                 <h2 class="title">Connexion</h2>
                 <div class="input-field">
                     <i class="fa fa-user"></i>
@@ -17,7 +16,6 @@
             </form>
 
             <form class="register-form" @submit.prevent="handleRegister">
-                <AlertComponent v-if="alertMessage" :message="alertMessage" :type="alertType" />
                 <h2 class="title">Inscription</h2>
                 <div class="input-field">
                     <i class="fas fa-user"></i>
@@ -61,12 +59,10 @@
 
 <script>
 import axios from 'axios';
-import AlertComponent from './AlertComponent.vue'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
-    components: {
-        AlertComponent
-    },
     data() {
         return {
             name: '',
@@ -74,9 +70,7 @@ export default {
             password: '',
             emailLogin: '',
             passwordLogin: '',
-            isSingUpMode: false,
-            alertMessage: '',
-            alertType: ''
+            isSingUpMode: false
         }
     },
     methods: {
@@ -87,13 +81,10 @@ export default {
                     email: this.email,
                     password: this.password,
                 });
-                this.alertMessage = 'Inscription avec succès. Connectez vous svp';
-                this.alertType = 'success'
+                toast.success('Inscription avec succès. Connectez vous svp');
                 this.resetRegisterFields()
             } catch (error) {
-                this.alertMessage = 'Echec lors Inscription. Veuillez Reessayer SVP !';
-                this.alertType = 'failed'
-                window.location.reload()
+                toast.error('Echec lors Inscription. Veuillez Reessayer SVP !', {autoClose: 2000})
                 this.resetRegisterFields()
             }
         },
@@ -106,16 +97,11 @@ export default {
                 if ( response.data.two_factor_required ) {
                    this.$emit('show-2fa', response.data.temp_token);
                 } else {
-                    // this.alertMessage = 'Connexion reussie avec succès';
-                    // this.alertType = 'success'
-                    // this.resetLoginFields();
+                    this.resetLoginFields();
                 }
             } catch (error) {
-                this.alertMessage = 'Identifiant ou mot de passe invalide. Veuillez Reessayer SVP!';
-                this.alertType = 'failed'
-                window.location.reload()
+                toast.error('Identifiant ou mot de passe invalide. Veuillez Reessayer SVP!', {autoClose: 2000})
                 this.resetLoginFields()
-                //console.error(error);
             }
         },
         toggleSignUpMode() {
