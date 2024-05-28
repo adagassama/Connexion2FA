@@ -1,9 +1,9 @@
-# Projet Connexion 2FA avec Laravel et VueJS
+# Connexion 2FA avec Laravel et VueJS
 
 Ce projet implémente un système d'authentification sécurisé avec une authentification à deux facteurs (2FA) utilisant Google Authenticator. Il utilise LARAVEL pour le backend et VueJS pour le frontend.L'application garantit des pratiques de sécurité robustes pour se protéger contre les attaques courantes comme les injections SQL.
 
 ## Table des matières
-- [Projet Connexion 2FA avec Laravel et VueJS](#projet-connexion-2fa-avec-laravel-et-vuejs)
+- [Connexion 2FA avec Laravel et VueJS](#connexion-2fa-avec-laravel-et-vuejs)
   - [Table des matières](#table-des-matières)
   - [Fonctionnalités](#fonctionnalités)
   - [Prérequis](#prérequis)
@@ -11,7 +11,7 @@ Ce projet implémente un système d'authentification sécurisé avec une authent
     - [Backend (Laravel)](#backend-laravel)
     - [Frontend (VueJS)](#frontend-vuejs)
   - [Utilisation](#utilisation)
-    - [Tests Backend](#tests-backend)
+  - [Tests Backend](#tests-backend)
 
 ## Fonctionnalités
 
@@ -71,7 +71,7 @@ Il faut installer les prérequis avant de lancer le projet.
 - Accéder à `http://localhost:5173/` dans votre navigateur pour voir l'application en action.
 - Inscrivez-vous, connectez-vous et suivez les instructions pour configurer l'authentification à deux facteurs.
 
-### Tests Backend 
+## Tests Backend 
 . **lancer les tests:**
     ```bash
     cd Backend
