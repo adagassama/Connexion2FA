@@ -25,8 +25,6 @@ Il faut installer les prérequis avant de lancer le projet.
 
 - [Node.js](https://nodejs.org/)
 - [Composer](https://getcomposer.org/)
-- [Laravel](version 10.48.11)
-- [Vue 3](version)
 
 ## Installation
 
@@ -72,7 +70,7 @@ Il faut installer les prérequis avant de lancer le projet.
 - Inscrivez-vous, connectez-vous et suivez les instructions pour configurer l'authentification à deux facteurs.
 
 ## Tests Backend 
-. **lancer les tests:**
+- **lancer les tests:**
     ```bash
     cd Backend
     php artisan test
