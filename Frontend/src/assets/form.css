@@ -131,6 +131,10 @@ form.login-form{
     background-color: #4d84e2;
 }
 
+.dashboard{
+    text-align: center;
+}
+
 .panels-container{
     position: absolute;
     height: 100%;
