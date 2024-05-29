@@ -1,73 +1,60 @@
 <template>
-<div class="container">
-    <div class="forms-container">
-        <div class="login-register">
-            <form class="login-form" @submit.prevent="verifyToken">
-            
-                <h2 class="title" v-if="qrCodeUrl">Authentification</h2>
-                <p>Scanner ce QR Code avec Google Authenticator ou Authy</p>
-                <img :src="qrCodeUrl" alt="QR Code" style="height: 300px;width: 300px;">
-                <label>Saisir le code:</label>
-                <div class="input-field">
-                    <i class="fa-solid fa-user"></i>
-                    <input v-model="token" type="text" required>
-                </div>
-                <button class="btn solid" type="submit">Verifier</button>
-            </form>
+    <div class="container">
+        <div class="forms-container">
+            <div class="login-register">
+                <form class="login-form" @submit.prevent="verifyToken">
+                    <h2 class="title" v-if="qrCodeUrl">Authentification</h2>
+                    <p>Scanner ce QR Code avec Google Authenticator ou Authy</p>
+                    <img :src="qrCodeUrl" alt="QR Code" style="height: 300px;width: 300px;">
+                    <label>Saisir le code:</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-user"></i>
+                        <input v-model="token" type="text" required>
+                    </div>
+                    <button class="btn solid" type="submit">Verifier</button>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <span></span>
         </div>
     </div>
-
-    <div>
-        <span></span>
-    </div>
-</div>
 </template>
 
-<script>
-import axios from 'axios';
+<script setup>
+import { ref, onMounted } from 'vue';
+import { getQRCodeApi, verifyTokenApi } from '@/services/apiService';
 import { useRouter } from 'vue-router';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-export default {
-    props: ['tempToken'],
-    data() {
-        return {
-            token: '',
-            qrCodeUrl: '',
-            router: useRouter()
-        };
-    },
-    async mounted() {
-        try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/qrcode?temp_token=${this.tempToken}`);
-            this.qrCodeUrl = response.data.qr_code_url;
-        } catch (error) {
-            console.error(error);
+const props = defineProps(['tempToken']);
+const token = ref('');
+const qrCodeUrl = ref('');
+const router = useRouter();
+
+onMounted(async () => {
+        qrCodeUrl.value = await getQRCodeApi(props.tempToken);
+});
+
+const verifyToken = async () => {
+    try {
+        const success = await verifyTokenApi({ token: token.value, temp_token: props.tempToken });
+        if (success){
+            localStorage.setItem('isAuthenticated', 'true');
+            router.push({ name: 'Dashboard'});
+            toast.success('Code de vérification valide')
+        } else {
+            toast.error('Code de vérification invalide')
+            resetCodeField();
         }
-    },
-    methods: {
-        async verifyToken() {
-            try {
-                const response = await axios.post('http://127.0.0.1:8000/api/verify', {
-                    token: this.token,
-                    temp_token: this.tempToken,
-                });
-                if (response.data.success) {
-                    localStorage.setItem('isAuthenticated', 'true');
-                    this.router.push({ name: 'Dashboard'});
-                    toast.success('Code de vérification valide')
-                }else {
-                    toast.error('Code de vérification invalide')
-                    this.resetCodeField();
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        resetCodeField(){
-            this.token = "";
-        },
-    },
+    } catch (error) {
+        resetCodeField();
+    }
+};
+
+const resetCodeField = () =>{
+    token.value = "";
 };
 </script>
