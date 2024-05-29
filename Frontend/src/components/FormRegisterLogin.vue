@@ -118,5 +118,5 @@ const resetRegisterFields = () => {
 </script>
 
 <style>
-@import '../assets/form.css';
+@import '../styles/styles.css';
 </style>
