@@ -13,44 +13,45 @@ class AuthController extends Controller
     //Add new user
     public function register(Request $request)
     {
-        $request->validate([
-            'name'  => 'required|string|max:255',
+        $validatedUser = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|email|unique:users',
             'password' => 'required|string|min:8',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email'=> $request->email,
-            'password'=>Hash::make($request->password),
-        ]);
-        return response()->json(['message' => 'User registered successfully'], 201);
+        try {
+            $user = User::create([
+                'name' => $validatedUser['name'],
+                'email' => $validatedUser['email'],
+                'password' => Hash::make($validatedUser['password'], ),
+            ]);
+            return response()->json(['message' => 'Utilisateur enregistré avec succès'], 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Echec lors de la création du compte Utilisateur'], 500);
+        }
     }
 
     // Add Login method
     public function login(Request $request)
     {
-        $request->validate([
+        $validatedLogin = $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $validatedLogin['email'])->first();
 
-        if(!$user || !Hash::check($request->password, $user->password)){
-            return response()->json(['message' => 'Invalid credentials'], 401);
+        if (!$user || !Hash::check($validatedLogin['password'], $user->password)) {
+            return response()->json(['message' => 'Identifiants invalides'], 401);
         }
 
-        if($user){
-            $tempToken = bin2hex(random_bytes(32));
-            cache([$tempToken => $user->id], now()->addMinutes(10));
-            return response()->json(['two_factor_required' => true, 'temp_token' => $tempToken]);
-        }
-
+        $tempToken = bin2hex(random_bytes(32));
+        cache([$tempToken => $user->id], now()->addMinutes(10));
         // Generate Token for user
         $token = $user->createToken('authToken')->plainTextToken;
 
-        return response()->json(['token' => $token]);
+        return response()->json(['two_factor_required' => true, 'temp_token' => $tempToken, 'token' => $token]);
+
     }
 
     // Generated QRCode
@@ -58,8 +59,9 @@ class AuthController extends Controller
     {
         $userId = cache($request->temp_token);
         if (!$userId) {
-            return response()->json(['message' => 'Invalid temp Token'], 400);
+            return response()->json(['message' => 'Temp Token invalide'], 400);
         }
+
         $user = User::find($userId);
         $google2fa = new Google2FA();
         $secretKey = $google2fa->generateSecretKey();
@@ -67,11 +69,9 @@ class AuthController extends Controller
         $user->save();
 
         $google2fa->setQrCodeService(new Chillerlan());
-        $qrCodeUrl = $google2fa -> getQRCodeInline(
-            'GassApp', $user->email, $secretKey
-        );
+        $qrCodeUrl = $google2fa->getQRCodeInline('GassApp', $user->email, $secretKey);
 
-        return response()->json(['qr_code_url'=> $qrCodeUrl]);
+        return response()->json(['qr_code_url' => $qrCodeUrl]);
     }
 
     //Verify 2FA Token
@@ -79,7 +79,7 @@ class AuthController extends Controller
     {
         $userId = cache($request->temp_token);
         if (!$userId) {
-            return response()->json(['message' => 'Invalid temp Token'], 400);
+            return response()->json(['message' => 'Temp Token Invalide'], 400);
         }
 
         $user = User::find($userId);
@@ -87,12 +87,12 @@ class AuthController extends Controller
 
         $isValid = $google2fa->verifyKey($user->secret2fa, $request->token);
 
-        if( $isValid ) {
+        if ($isValid) {
             $token = $user->createToken('authToken')->plainTextToken;
             return response()->json(['token' => $token, 'success' => true]);
         }
 
-        return response()->json(['message' => 'Invalid code 2FA fin de code']);
+        return response()->json(['message' => 'Code 2FA invalide']);
     }
 
 }
