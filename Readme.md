@@ -59,7 +59,7 @@ Il faut installer les prérequis avant de lancer le projet.
 
 1. **Installer les dépendances npm:**
     ```bash
-    cd ../frontend
+    cd ../Frontend
     npm install
 2. **Lancer le serveur de développement VueJS:**
     ```bash
