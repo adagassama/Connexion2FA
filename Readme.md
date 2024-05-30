@@ -1,6 +1,6 @@
 # Connexion 2FA avec Laravel et VueJS
 
-Ce projet implémente un système d'authentification sécurisé avec une authentification à deux facteurs (2FA) utilisant Google Authenticator. Il utilise LARAVEL pour le backend et VueJS pour le frontend.L'application garantit des pratiques de sécurité robustes pour se protéger contre les attaques courantes comme les injections SQL.
+Ce projet implémente un système d'authentification sécurisé avec une authentification à deux facteurs (2FA) utilisant Google Authenticator. Il utilise LARAVEL pour le backend et VueJS pour le frontend. L'application garantit des pratiques de sécurité robustes pour se protéger contre les attaques courantes comme les injections SQL.
 
 ## Table des matières
 - [Connexion 2FA avec Laravel et VueJS](#connexion-2fa-avec-laravel-et-vuejs)
@@ -41,7 +41,7 @@ Il faut installer les prérequis avant de lancer le projet.
 3. **Configurez le fichier `.env`:**
     ```env
     DB_CONNECTION=sqlite
-    DB_DATABASE=/chemin/vers/votre/Connexion2FA/Backend/database/database.sqlite
+    DB_DATABASE=/chemin/vers/votre/dossier/Connexion2FA/Backend/database/database.sqlite
     ```
 4. **Créer le fichier SQLite:**
     ```bash
