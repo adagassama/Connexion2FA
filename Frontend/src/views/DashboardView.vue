@@ -21,21 +21,7 @@ const logout = () => {
 onMounted(() => {
     toast.success('Connexion réussie')
 })
-// export default {
-//     setup() {
-//         toast.success('Connexion réussie');
-//     },
-//     components: {
-//         DashboardHome,
-//     },
-//     methods: {
-//         logout() {
-//             localStorage.setItem('isAuthenticated', 'false');
-//             this.$router.push({ name: 'Auth' });
-//         }
-//     }
-// }
 </script>
 <style>
-@import '../assets/form.css';
+@import '../styles/styles.css';
 </style>
