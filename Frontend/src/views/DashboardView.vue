@@ -19,7 +19,7 @@ const logout = () => {
 };
 
 onMounted(() => {
-    toast.success('Connexion réussie')
+    toast.info('Bienvenue dans le Dashboard !!!')
 })
 </script>
 <style>

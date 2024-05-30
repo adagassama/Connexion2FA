@@ -23,6 +23,7 @@ const router = createRouter({
     ]
 });
 
+// Check if user is authenticated in to keep access to the Dashboard
 router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {

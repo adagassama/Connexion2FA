@@ -50,10 +50,6 @@
                 </div>
             </div>
         </div>
-
-        <div>
-            <span></span>
-        </div>
     </div>
 </template>
 
@@ -61,6 +57,7 @@
 import { ref } from 'vue';
 import { registerUserApi, loginUserApi } from '@/services/apiService';
 
+// Define variables for form fielsds
 const name = ref('');
 const email = ref('');
 const password = ref('');
@@ -69,6 +66,7 @@ const passwordLogin = ref('');
 const isSignUpMode = ref(false);
 const emit = defineEmits(['show-2fa']);
 
+// Handle Register
 const handleRegister = async () => {
     try {
         await registerUserApi({
@@ -82,6 +80,7 @@ const handleRegister = async () => {
     }
 };
 
+//Handle Login
 const handleLogin = async () => {
     try {
         const data = await loginUserApi({
@@ -99,16 +98,23 @@ const handleLogin = async () => {
     }
 };
 
+// Switch to sign-up mode
 const toggleSignUpMode = () => {
     isSignUpMode.value = true;
 };
+
+// Switch to login mode
 const toggleSignInMode = () => {
     isSignUpMode.value = false;
 };
+
+// Reset login fields
 const resetLoginFields = () => {
     emailLogin.value = "";
     passwordLogin.value = "";
 };
+
+// Reset registration fields
 const resetRegisterFields = () => {
     name.value = "";
     email.value = "";
