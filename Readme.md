@@ -37,8 +37,9 @@ Il faut installer les prérequis avant de lancer le projet.
 2. **Installer les dépendances:**
     ```bash
     composer install
+    composer update
     ```
-3. **Configurez le fichier `.env`:**
+3. **Créer le fichier `.env` en copiant le contenu du fichier `.env.example`et remplacer:**
     ```env
     DB_CONNECTION=sqlite
     DB_DATABASE=/chemin/vers/votre/dossier/Connexion2FA/Backend/database/database.sqlite
