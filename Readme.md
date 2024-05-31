@@ -39,14 +39,14 @@ Il faut installer les prérequis avant de lancer le projet.
     composer install
     composer update
     ```
-3. **Créer le fichier `.env` en copiant le contenu du fichier `.env.example`et remplacer:**
+ 3. **Créer le fichier SQLite:**
+    ```bash
+    touch database/database.sqlite
+    ```
+4. **Créer le fichier `.env` en copiant le contenu du fichier `.env.example`et remplacer:**
     ```env
     DB_CONNECTION=sqlite
     DB_DATABASE=/chemin/vers/votre/dossier/Connexion2FA/Backend/database/database.sqlite
-    ```
-4. **Créer le fichier SQLite:**
-    ```bash
-    touch database/database.sqlite
     ```
 5. **Exécuter les migrations:**
     ```bash
